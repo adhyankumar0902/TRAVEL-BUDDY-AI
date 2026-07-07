@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 // Load environment variables from server/.env file
 dotenv.config();
@@ -21,6 +22,9 @@ app.use(express.json());
 
 // Main Auth Routes mount path
 app.use('/api/auth', authRoutes);
+
+// Main Profile Routes mount path
+app.use('/api/profile', profileRoutes);
 
 // Simple health check endpoint
 app.get('/', (req, res) => {

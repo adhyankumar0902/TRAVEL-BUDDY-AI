@@ -92,6 +92,17 @@ export const AuthProvider = ({ children }) => {
     setError(null);
   };
 
+  // Action: Update User details in state
+  const updateUser = (updatedUserData) => {
+    setUser((prev) => {
+      if (!prev) return updatedUserData;
+      return {
+        ...prev,
+        ...updatedUserData
+      };
+    });
+  };
+
   // Object containing context values
   const value = {
     user,
@@ -101,6 +112,7 @@ export const AuthProvider = ({ children }) => {
     signupUser,
     loginUser,
     logoutUser,
+    updateUser,
     setError
   };
 

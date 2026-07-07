@@ -4,6 +4,8 @@ import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import DashboardPage from '../pages/DashboardPage';
+import ProfilePage from '../pages/ProfilePage';
+import EditProfilePage from '../pages/EditProfilePage';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -17,6 +19,9 @@ const AppRoutes = () => {
       {/* Protected Routes (Require Authentication) */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/edit" element={<EditProfilePage />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
       </Route>
 
       {/* Catch-all Redirect */}

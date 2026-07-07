@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, User, Mail, Compass, MapPin, Calendar, Compass as CompassIcon, Award } from 'lucide-react';
+import profileService from '../services/profileService';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { 
+  LogOut, User, Mail, Compass, MapPin, Calendar, 
+  Compass as CompassIcon, Award, ArrowRight, Edit, Sparkles, CheckCircle2 
+} from 'lucide-react';
 
 const DashboardPage = () => {
   const { user, logoutUser } = useAuth();
+  const navigate = useNavigate();
+
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardProfile = async () => {
+      try {
+        const data = await profileService.getProfile();
+        setProfile(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching dashboard profile:', err);
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardProfile();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-navy-900 via-[#0b1329] to-[#1e293b] flex flex-col">
@@ -108,29 +133,98 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* Quick Stats / Highlights Block */}
+          {/* Right Area Grid */}
           <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* System Status Panel */}
+            {/* Profile Completion Card */}
+            <div className="glass-panel p-6 rounded-3xl space-y-4 col-span-1 md:col-span-2">
+              <h3 className="text-lg font-bold text-white flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Award className="h-5 w-5 text-brand-400" />
+                  <span>Profile Completion</span>
+                </span>
+                {loading ? (
+                  <span className="text-xs text-slate-500">Calculating...</span>
+                ) : (
+                  <span className="text-sm font-extrabold text-brand-400">
+                    {profile?.profileCompletionPercentage || 0}% Complete
+                  </span>
+                )}
+              </h3>
+
+              {loading ? (
+                <div className="flex items-center justify-center py-6">
+                  <LoadingSpinner size="sm" />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Progress Bar */}
+                  <div className="w-full bg-slate-800/60 rounded-full h-3 overflow-hidden border border-slate-700/20">
+                    <div 
+                      className="bg-gradient-to-r from-brand-500 to-brand-400 h-full rounded-full transition-all duration-1000 ease-out" 
+                      style={{ width: `${profile?.profileCompletionPercentage || 0}%` }}
+                    />
+                  </div>
+
+                  {/* Encouragement / missing fields warning */}
+                  {(profile?.profileCompletionPercentage || 0) < 100 ? (
+                    <div className="space-y-3 bg-amber-950/15 border border-amber-500/10 p-4 rounded-2xl">
+                      <p className="text-xs text-slate-300 font-light leading-relaxed">
+                        <span className="text-amber-400 font-semibold">Tip:</span> Complete your profile to improve future travel buddy recommendations.
+                      </p>
+                      
+                      {profile?.missingFields && profile.missingFields.length > 0 && (
+                        <div className="space-y-1">
+                          <span className="block text-[10px] text-slate-500 uppercase tracking-widest font-bold">Remaining Checklist:</span>
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {profile.missingFields.map((field) => (
+                              <span key={field} className="bg-amber-500/10 text-amber-300 border border-amber-500/15 px-2 py-0.5 rounded-md text-[10px] font-semibold">
+                                {field}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 bg-emerald-950/15 border border-emerald-500/10 p-4 rounded-2xl text-emerald-400">
+                      <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
+                      <span className="text-xs font-semibold">Your traveler profile is 100% complete! Ready for matchmaking in Phase 3.</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Quick Actions Panel */}
             <div className="glass-panel p-6 rounded-3xl space-y-4">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <CompassIcon className="h-5 w-5 text-brand-400" />
-                <span>TravelBuddy Modules</span>
+                <Sparkles className="h-5 w-5 text-brand-400" />
+                <span>Quick Actions</span>
               </h3>
               
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-brand-500/5 rounded-xl border border-brand-500/15">
-                  <span className="text-sm text-slate-300">Phase 1: User Auth System</span>
-                  <span className="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold border border-emerald-500/20">Active</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-slate-800/20 rounded-xl border border-slate-800/50">
-                  <span className="text-sm text-slate-400">Phase 2: AI Planner</span>
-                  <span className="text-xs bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full font-semibold border border-amber-500/20">Pending</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-slate-800/20 rounded-xl border border-slate-800/50">
-                  <span className="text-sm text-slate-400">Phase 3: Itinerary Export</span>
-                  <span className="text-xs bg-slate-800 text-slate-500 px-2 py-0.5 rounded-full font-semibold">Locked</span>
-                </div>
+              <div className="grid grid-cols-1 gap-3">
+                <Link
+                  to="/profile"
+                  className="flex items-center justify-between p-3.5 bg-navy-800/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                >
+                  <span className="flex items-center gap-2">
+                    <User className="h-4 w-4 text-brand-400" />
+                    <span>View Profile</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-400 group-hover:translate-x-1 transition-all" />
+                </Link>
+
+                <Link
+                  to="/profile/edit"
+                  className="flex items-center justify-between p-3.5 bg-navy-800/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                >
+                  <span className="flex items-center gap-2">
+                    <Edit className="h-4 w-4 text-brand-400" />
+                    <span>Edit Profile</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-400 group-hover:translate-x-1 transition-all" />
+                </Link>
               </div>
             </div>
 
@@ -138,16 +232,39 @@ const DashboardPage = () => {
             <div className="glass-panel p-6 rounded-3xl bg-gradient-to-br from-brand-950/20 via-navy-900/40 to-slate-800/10 border border-brand-500/20 flex flex-col justify-between space-y-4">
               <div className="space-y-2">
                 <div className="bg-brand-500/10 p-2.5 rounded-xl w-fit text-brand-400">
-                  <MapPin className="h-5 w-5" />
+                  <CompassIcon className="h-5 w-5" />
                 </div>
                 <h4 className="font-bold text-white text-lg">Plan Your Next Voyage</h4>
                 <p className="text-slate-400 text-sm leading-relaxed font-light">
-                  Once Phase 2 is launched, you will be able to input preferences, select trip durations, and let TravelBuddy AI assemble the ideal itinerary.
+                  Once Phase 3 is launched, you will be able to input preferences, select trip durations, and let TravelBuddy AI assemble the ideal itinerary.
                 </p>
               </div>
 
               <div className="text-xs text-brand-400 font-semibold tracking-wider uppercase">
                 Explore the world &rarr;
+              </div>
+            </div>
+
+            {/* System Status Panel */}
+            <div className="glass-panel p-6 rounded-3xl space-y-4 col-span-1 md:col-span-2">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <CompassIcon className="h-5 w-5 text-brand-400" />
+                <span>TravelBuddy Modules</span>
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="flex items-center justify-between p-3 bg-brand-500/5 rounded-xl border border-brand-500/15">
+                  <span className="text-xs text-slate-300">Phase 1: Authentication</span>
+                  <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold border border-emerald-500/20">Active</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-brand-500/10 rounded-xl border border-brand-500/20">
+                  <span className="text-xs text-slate-300">Phase 2: Profile System</span>
+                  <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold border border-emerald-500/20">Active</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-slate-800/20 rounded-xl border border-slate-800/50">
+                  <span className="text-xs text-slate-400">Phase 3: Matchmaking</span>
+                  <span className="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full font-semibold border border-amber-500/20">Pending</span>
+                </div>
               </div>
             </div>
 

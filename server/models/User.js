@@ -24,7 +24,42 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  profileImage: {
+    type: String,
+    default: 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
+  },
+  bio: {
+    type: String,
+    maxlength: [300, 'Bio cannot exceed 300 characters'],
+    default: ''
+  },
+  age: {
+    type: Number
+  },
+  gender: {
+    type: String,
+    enum: ['Male', 'Female', 'Prefer not to say'],
+    default: 'Prefer not to say'
+  },
+  location: {
+    type: String,
+    default: ''
+  },
+  languages: {
+    type: [String],
+    default: []
+  },
+  travelStyle: {
+    type: String,
+    enum: ['Adventure', 'Backpacking', 'Luxury', 'Road Trip', 'Camping', 'Solo', 'Family', 'Business']
+  },
+  interests: {
+    type: [String],
+    default: []
   }
+}, {
+  timestamps: true
 });
 
 // Pre-save middleware to hash the password before saving it to the database
