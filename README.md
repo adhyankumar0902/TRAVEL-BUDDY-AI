@@ -11,9 +11,9 @@ A full-stack MERN application that helps travelers **plan trips**, **discover co
 ---
 
 ![Project Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen)
-![Phase](https://img.shields.io/badge/Current%20Phase-2%20Complete-blue)
+![Phase](https://img.shields.io/badge/Current%20Phase-3%20Complete-success)
 ![License](https://img.shields.io/badge/License-MIT-orange)
-![MERN](https://img.shields.io/badge/Stack-MERN-success)
+![Stack](https://img.shields.io/badge/Stack-MERN-success)
 
 </div>
 
@@ -23,7 +23,21 @@ A full-stack MERN application that helps travelers **plan trips**, **discover co
 
 TravelBuddy AI is a modern travel platform designed to simplify travel planning while helping users find compatible travel companions based on their interests, travel style, budget, and preferences.
 
-The project follows a modular development approach where each feature is designed, implemented, tested, and documented before moving to the next phase.
+The project follows a structured, feature-driven development approach where every module is designed, implemented, tested, and documented before moving to the next phase.
+
+---
+
+# 🚀 Highlights
+
+- 🔐 Secure JWT Authentication
+- 👤 Complete User Profile System
+- 🧳 Full Trip Management System
+- 🌙 Modern Glassmorphism UI
+- 📱 Responsive Design
+- ⚡ React + Vite Frontend
+- 🍃 MongoDB Database
+- 🛡 Protected REST APIs
+- 🎯 Modular React Architecture
 
 ---
 
@@ -42,7 +56,7 @@ The project follows a modular development approach where each feature is designe
 
 ## 👤 User Profile Management
 
-- Edit Profile
+- Create & Edit Profile
 - View Personal Profile
 - View Public Profiles
 - Travel Style Selection
@@ -55,18 +69,36 @@ The project follows a modular development approach where each feature is designe
 
 ---
 
-# 🚧 Upcoming Features
+## 🧳 Trip Management System
 
-- ✈️ Trip Planning System
-- 🤝 AI Travel Buddy Matching
-- 💬 Real-Time Chat
-- ⭐ Reviews & Ratings
-- 🧠 AI Itinerary Generator
-- 📍 Maps Integration
-- 🔔 Notifications
-- 📱 Responsive Mobile Experience
+- Create Trip (5-Step Wizard)
+- View My Trips
+- View Trip Details
+- Edit Trip
+- Delete Trip
+- Trip Preferences
+- Budget Planning
+- Travel Group Preferences
+- Public / Private Trips
+- Responsive Glassmorphism UI
+- Complete CRUD Operations
 
 ---
+
+# 🗺 Project Roadmap
+
+| Phase | Status |
+|--------|--------|
+| Phase 1 – Authentication | ✅ Complete |
+| Phase 2 – User Profile | ✅ Complete |
+| Phase 3 – Trip Management | ✅ Complete |
+| Phase 4 – Matchmaking | 🚧 In Progress |
+| Phase 5 – AI Features | ⏳ Planned |
+| Phase 6 – Deployment | ⏳ Planned |
+
+---
+
+
 
 # 🛠 Tech Stack
 
@@ -104,7 +136,7 @@ The project follows a modular development approach where each feature is designe
 
 # 📂 Project Structure
 
-```
+```text
 TravelBuddy AI
 │
 ├── src/
@@ -112,7 +144,8 @@ TravelBuddy AI
 │   ├── context/
 │   ├── pages/
 │   ├── routes/
-│   └── services/
+│   ├── services/
+│   └── utils/
 │
 ├── server/
 │   ├── config/
@@ -126,6 +159,12 @@ TravelBuddy AI
 
 ---
 
+# 📸 Screenshots
+
+> Screenshots will be added after completion of the Matchmaking module.
+
+---
+
 # 🚀 Installation
 
 Clone the repository
@@ -134,7 +173,7 @@ Clone the repository
 git clone https://github.com/adhyankumar0902/TRAVEL-BUDDY-AI.git
 ```
 
-Go to project directory
+Go to the project directory
 
 ```bash
 cd TRAVEL-BUDDY-AI
@@ -153,13 +192,13 @@ cd server
 npm install
 ```
 
-Start Backend
+Start the backend
 
 ```bash
 npm run dev
 ```
 
-Start Frontend
+Start the frontend
 
 ```bash
 npm run dev
@@ -181,7 +220,6 @@ JWT_SECRET=YOUR_SECRET_KEY
 
 ---
 
-
 # 🎯 Learning Objectives
 
 This project is being built to strengthen practical experience in:
@@ -198,6 +236,17 @@ This project is being built to strengthen practical experience in:
 
 ---
 
+# 📈 Current Progress
+
+- ✅ Authentication System
+- ✅ User Profile System
+- ✅ Trip Management System
+- 🚧 Travel Buddy Matchmaking
+- ⏳ AI Trip Planner
+- ⏳ Real-Time Chat
+
+---
+
 # 🤝 Contributing
 
 Contributions, suggestions, and feedback are welcome.
@@ -211,7 +260,7 @@ Feel free to fork the repository and submit pull requests.
 **Adhyan Kumar**
 
 B.Tech Computer Science & Engineering  
-Indian Institute of Technology Patna
+Indian Institute of Technology Patna (IIT Patna)
 
 GitHub:
 
@@ -221,10 +270,8 @@ https://github.com/adhyankumar0902
 
 # ⭐ Project Status
 
-🚀 **Currently under active development**
+🚀 **TravelBuddy AI is currently under active development.**
 
-The project is being developed incrementally with detailed engineering documentation and structured feature-based milestones.
+The project follows a structured milestone-based roadmap with each phase being fully implemented, tested, and documented before moving to the next stage.
 
----
-
-If you like this project, consider giving it a ⭐ on GitHub.
+If you like this project, consider giving it a ⭐ on GitHub!
