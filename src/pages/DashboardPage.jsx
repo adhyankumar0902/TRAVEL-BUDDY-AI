@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import profileService from '../services/profileService';
+import notificationService from '../services/notificationService';
 import LoadingSpinner from '../components/LoadingSpinner';
+import NotificationBell from '../components/NotificationBell';
 import { 
   LogOut, User, Mail, Compass, MapPin, Calendar, 
   Compass as CompassIcon, Award, ArrowRight, Edit, Sparkles, CheckCircle2,
-  PlusCircle, Map
+  PlusCircle, Map, Send, Search, Bell
 } from 'lucide-react';
 
 const DashboardPage = () => {
@@ -15,6 +17,38 @@ const DashboardPage = () => {
 
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const fetchNotifications = async () => {
+    try {
+      const data = await notificationService.getNotifications();
+      setNotifications(data);
+      setUnreadCount(data.filter(n => !n.read).length);
+    } catch (err) {
+      console.error('Error fetching dashboard notifications:', err);
+    }
+  };
+
+  const markNotifRead = async (id) => {
+    try {
+      await notificationService.markAsRead(id);
+      setNotifications(prev => prev.map(n => n._id === id ? { ...n, read: true } : n));
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error('Error marking notification read:', err);
+    }
+  };
+
+  const markAllNotifsRead = async () => {
+    try {
+      await notificationService.markAllAsRead();
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setUnreadCount(0);
+    } catch (err) {
+      console.error('Error marking all read:', err);
+    }
+  };
 
   useEffect(() => {
     const fetchDashboardProfile = async () => {
@@ -29,6 +63,7 @@ const DashboardPage = () => {
     };
 
     fetchDashboardProfile();
+    fetchNotifications();
   }, []);
 
   return (
@@ -45,6 +80,14 @@ const DashboardPage = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Notification Bell Dropdown */}
+            <NotificationBell 
+              notifications={notifications} 
+              unreadCount={unreadCount} 
+              onMarkAsRead={markNotifRead}
+              onMarkAllAsRead={markAllNotifsRead}
+            />
+
             <div className="hidden sm:flex items-center gap-2 text-slate-300 text-sm bg-slate-800/40 px-3 py-1.5 rounded-xl border border-slate-700/30">
               <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Session Active</span>
@@ -206,8 +249,41 @@ const DashboardPage = () => {
               
               <div className="grid grid-cols-1 gap-3">
                 <Link
+                  to="/public-trips"
+                  className="flex items-center justify-between p-3.5 bg-brand-500/5 hover:bg-brand-500/10 border border-brand-500/20 hover:border-brand-500/30 rounded-2xl text-brand-350 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                >
+                  <span className="flex items-center gap-2">
+                    <Compass className="h-4 w-4 text-brand-400" />
+                    <span>Browse Trips</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-400 group-hover:translate-x-1 transition-all" />
+                </Link>
+
+                <Link
+                  to="/join-requests"
+                  className="flex items-center justify-between p-3.5 bg-[#0c142b]/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                >
+                  <span className="flex items-center gap-2">
+                    <Bell className="h-4 w-4 text-brand-400" />
+                    <span>Join Requests</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-400 group-hover:translate-x-1 transition-all" />
+                </Link>
+
+                <Link
+                  to="/my-requests"
+                  className="flex items-center justify-between p-3.5 bg-[#0c142b]/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                >
+                  <span className="flex items-center gap-2">
+                    <Send className="h-4 w-4 text-brand-400" />
+                    <span>My Requests</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-400 group-hover:translate-x-1 transition-all" />
+                </Link>
+
+                <Link
                   to="/profile"
-                  className="flex items-center justify-between p-3.5 bg-navy-800/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                  className="flex items-center justify-between p-3.5 bg-[#0c142b]/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
                 >
                   <span className="flex items-center gap-2">
                     <User className="h-4 w-4 text-brand-400" />
@@ -218,7 +294,7 @@ const DashboardPage = () => {
 
                 <Link
                   to="/profile/edit"
-                  className="flex items-center justify-between p-3.5 bg-navy-800/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                  className="flex items-center justify-between p-3.5 bg-[#0c142b]/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
                 >
                   <span className="flex items-center gap-2">
                     <Edit className="h-4 w-4 text-brand-400" />
@@ -229,7 +305,7 @@ const DashboardPage = () => {
 
                 <Link
                   to="/trips/create"
-                  className="flex items-center justify-between p-3.5 bg-navy-800/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                  className="flex items-center justify-between p-3.5 bg-[#0c142b]/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
                 >
                   <span className="flex items-center gap-2">
                     <PlusCircle className="h-4 w-4 text-brand-400" />
@@ -240,7 +316,7 @@ const DashboardPage = () => {
 
                 <Link
                   to="/trips"
-                  className="flex items-center justify-between p-3.5 bg-navy-800/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                  className="flex items-center justify-between p-3.5 bg-[#0c142b]/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
                 >
                   <span className="flex items-center gap-2">
                     <Map className="h-4 w-4 text-brand-400" />
@@ -280,13 +356,13 @@ const DashboardPage = () => {
                   <span className="text-xs text-slate-300">Phase 1: Authentication</span>
                   <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold border border-emerald-500/20">Active</span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-brand-500/10 rounded-xl border border-brand-500/20">
+                <div className="flex items-center justify-between p-3 bg-brand-500/5 rounded-xl border border-brand-500/15">
                   <span className="text-xs text-slate-300">Phase 2: Profile System</span>
                   <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold border border-emerald-500/20">Active</span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-slate-800/20 rounded-xl border border-slate-800/50">
-                  <span className="text-xs text-slate-400">Phase 3: Matchmaking</span>
-                  <span className="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full font-semibold border border-amber-500/20">Pending</span>
+                <div className="flex items-center justify-between p-3 bg-brand-500/10 rounded-xl border border-brand-500/20">
+                  <span className="text-xs text-slate-300">Phase 4: Matchmaking</span>
+                  <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold border border-emerald-500/20">Active</span>
                 </div>
               </div>
             </div>

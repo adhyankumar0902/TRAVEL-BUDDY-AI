@@ -10,6 +10,9 @@ import CreateTripPage from '../pages/CreateTripPage';
 import MyTripsPage from '../pages/MyTripsPage';
 import TripDetailsPage from '../pages/TripDetailsPage';
 import EditTripPage from '../pages/EditTripPage';
+import PublicTripsPage from '../pages/PublicTripsPage';
+import JoinRequestsPage from '../pages/JoinRequestsPage';
+import MyRequestsPage from '../pages/MyRequestsPage';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -32,6 +35,11 @@ const AppRoutes = () => {
         <Route path="/trips" element={<MyTripsPage />} />
         <Route path="/trips/:id" element={<TripDetailsPage />} />
         <Route path="/trips/edit/:id" element={<EditTripPage />} />
+
+        {/* Travel Buddy Matchmaking (Phase 4) Routes */}
+        <Route path="/public-trips" element={<PublicTripsPage />} />
+        <Route path="/join-requests" element={<JoinRequestsPage />} />
+        <Route path="/my-requests" element={<MyRequestsPage />} />
       </Route>
 
       {/* Catch-all Redirect */}

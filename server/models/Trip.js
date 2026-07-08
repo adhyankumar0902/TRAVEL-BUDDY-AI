@@ -88,7 +88,11 @@ const tripSchema = new mongoose.Schema({
   tripTags: {
     type: [String],
     default: []
-  }
+  },
+  members: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }]
 }, {
   timestamps: true
 });

@@ -30,12 +30,26 @@ const deleteTrip = async (id) => {
   return response.data;
 };
 
+// Discover public trips of other users
+const getPublicTrips = async (filters = {}) => {
+  const response = await api.get('/public-trips', { params: filters });
+  return response.data;
+};
+
+// Retrieve details for a public trip
+const getPublicTripDetails = async (id) => {
+  const response = await api.get(`/public-trips/${id}`);
+  return response.data;
+};
+
 const tripService = {
   createTrip,
   getMyTrips,
   getTrip,
   updateTrip,
-  deleteTrip
+  deleteTrip,
+  getPublicTrips,
+  getPublicTripDetails
 };
 
 export default tripService;

@@ -5,6 +5,9 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const tripRoutes = require('./routes/tripRoutes');
+const publicTripRoutes = require('./routes/publicTripRoutes');
+const joinRequestRoutes = require('./routes/joinRequestRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 // Load environment variables from server/.env file
 dotenv.config();
@@ -29,6 +32,15 @@ app.use('/api/profile', profileRoutes);
 
 // Main Trip Routes mount path
 app.use('/api/trips', tripRoutes);
+
+// Discover Public Trips routes
+app.use('/api/public-trips', publicTripRoutes);
+
+// Join Requests routes
+app.use('/api/join-requests', joinRequestRoutes);
+
+// In-app Notifications routes
+app.use('/api/notifications', notificationRoutes);
 
 // Simple health check endpoint
 app.get('/', (req, res) => {

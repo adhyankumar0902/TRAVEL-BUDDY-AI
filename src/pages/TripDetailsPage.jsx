@@ -3,9 +3,12 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   Compass, ArrowLeft, Calendar, DollarSign, Compass as CompassIcon,
   Users, Tag, Shield, Clock, Edit, Trash2, MapPin, Lock, Globe,
-  AlertCircle, Plane, Train, Bus, Car, Bike, Hotel, ChevronRight, User
+  AlertCircle, Plane, Train, Bus, Car, Bike, Hotel, ChevronRight, User, CheckCircle2
 } from 'lucide-react';
 import tripService from '../services/tripService';
+import joinRequestService from '../services/joinRequestService';
+import TripMembers from '../components/trip/TripMembers';
+import JoinRequestModal from '../components/trip/JoinRequestModal';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -41,6 +44,9 @@ const TripDetailsPage = () => {
   const { user } = useAuth();
 
   const [trip, setTrip] = useState(null);
+  const [joinRequest, setJoinRequest] = useState(null);
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [submittingJoin, setSubmittingJoin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -49,12 +55,29 @@ const TripDetailsPage = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const fetchTrip = async () => {
+    const fetchTripAndRequestStatus = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await tripService.getTrip(id);
-        setTrip(data);
+        
+        // Fetch trip details (which includes owner and member details)
+        const tripData = await tripService.getTrip(id);
+        setTrip(tripData);
+
+        // Fetch request status if current user is not the owner
+        const ownerId = tripData.owner?._id || tripData.owner;
+        const isOwnerUser = user && ownerId && user._id.toString() === ownerId.toString();
+
+        if (!isOwnerUser) {
+          try {
+            const requests = await joinRequestService.getJoinRequests();
+            const match = requests.outgoing.find(r => r.trip?._id === id || r.trip === id);
+            setJoinRequest(match || null);
+          } catch (reqErr) {
+            console.error('Error fetching request details for trip details page:', reqErr);
+          }
+        }
+
         setLoading(false);
       } catch (err) {
         console.error('Error fetching trip details:', err);
@@ -64,8 +87,40 @@ const TripDetailsPage = () => {
       }
     };
 
-    fetchTrip();
-  }, [id]);
+    if (id) {
+      fetchTripAndRequestStatus();
+    }
+  }, [id, user]);
+
+  const handleCancelRequest = async () => {
+    if (!joinRequest) return;
+    if (!window.confirm('Are you sure you want to cancel your request to join this trip?')) return;
+    try {
+      const updated = await joinRequestService.deleteJoinRequest(joinRequest._id);
+      if (updated.status === 'Cancelled') {
+        setJoinRequest(updated);
+      } else {
+        setJoinRequest(null);
+      }
+    } catch (err) {
+      console.error('Error cancelling request:', err);
+      alert(err.response?.data?.message || 'Failed to cancel the request.');
+    }
+  };
+
+  const handleJoinSubmit = async (message) => {
+    setSubmittingJoin(true);
+    try {
+      const response = await joinRequestService.createJoinRequest(id, message);
+      setJoinRequest(response);
+      setShowJoinModal(false);
+    } catch (err) {
+      console.error('Error joining trip:', err);
+      alert(err.response?.data?.message || 'Failed to send join request.');
+    } finally {
+      setSubmittingJoin(false);
+    }
+  };
 
   const handleDeleteConfirm = async () => {
     setIsDeleting(true);
@@ -212,7 +267,7 @@ const TripDetailsPage = () => {
                           className="text-sm font-bold text-white hover:text-brand-400 transition-colors flex items-center gap-1 cursor-pointer"
                         >
                           <span>{trip.owner.name}</span>
-                          <ChevronRight className="h-3.5 w-3.5 text-slate-500" />
+                          <ChevronRight className="h-3.5 w-3.5 text-slate-550" />
                         </Link>
                       ) : (
                         <span className="text-sm font-bold text-white">{trip.owner.name}</span>
@@ -221,6 +276,68 @@ const TripDetailsPage = () => {
                   </div>
                 )}
               </div>
+
+              {/* Join Request Banner */}
+              {!isOwner && user && (() => {
+                const currentMembersCount = trip.members ? trip.members.length : 0;
+                const availableSeats = trip.maxTravelers !== undefined ? (trip.maxTravelers - 1 - currentMembersCount) : null;
+                return (
+                  <div className="bg-navy-800/20 border border-slate-800/50 p-5 rounded-2xl flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div>
+                      <h3 className="text-sm font-bold text-white">Join Matchmaking Queue</h3>
+                      <p className="text-xs text-slate-400 font-light mt-1">
+                        {joinRequest === null 
+                          ? 'Request to join this adventure and connect with the leader.'
+                          : joinRequest.status === 'Pending'
+                          ? 'Your request is submitted and pending review by the trip leader.'
+                          : joinRequest.status === 'Accepted'
+                          ? 'You have been accepted! Check itinerary and stay in touch.'
+                          : joinRequest.status === 'Rejected'
+                          ? 'Your join request was declined by the leader.'
+                          : 'Your request has been cancelled.'}
+                      </p>
+                    </div>
+                    <div>
+                      {joinRequest === null ? (
+                        <button
+                          disabled={availableSeats === 0 || trip.status === 'Completed' || trip.status === 'Cancelled'}
+                          onClick={() => setShowJoinModal(true)}
+                          className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                            availableSeats === 0 || trip.status === 'Completed' || trip.status === 'Cancelled'
+                              ? 'bg-slate-800/30 text-slate-500 border-slate-800/50 cursor-not-allowed'
+                              : 'bg-brand-600 hover:bg-brand-500 text-white border-brand-500/20 shadow-md shadow-brand-500/5 hover:shadow-brand-500/10'
+                          }`}
+                        >
+                          {availableSeats === 0 ? 'Trip is Full' : 'Request to Join'}
+                        </button>
+                      ) : joinRequest.status === 'Pending' ? (
+                        <button
+                          onClick={handleCancelRequest}
+                          className="px-4 py-2 bg-red-955/20 hover:bg-red-950/40 border border-red-900/30 text-red-300 hover:text-red-200 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md shadow-red-900/5"
+                        >
+                          Cancel Request
+                        </button>
+                      ) : joinRequest.status === 'Accepted' ? (
+                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                          <CheckCircle2 className="h-4 w-4" />
+                          <span>Member of Trip</span>
+                        </span>
+                      ) : joinRequest.status === 'Rejected' ? (
+                        <span className="bg-red-500/10 text-red-400 border border-red-500/15 px-4 py-2 rounded-xl text-xs font-bold">
+                          Request Declined
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => setShowJoinModal(true)}
+                          className="px-5 py-2.5 bg-slate-800/40 hover:bg-slate-800/70 text-slate-200 rounded-xl text-xs font-bold transition-all border border-slate-700/30 cursor-pointer"
+                        >
+                          Re-Request Join
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Core Information Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -342,6 +459,14 @@ const TripDetailsPage = () => {
                 )}
               </div>
 
+              {/* Trip Members Section */}
+              <div className="pt-2">
+                <TripMembers 
+                  members={trip.members || []} 
+                  owner={trip.owner} 
+                />
+              </div>
+
               {/* Meta Timestamps */}
               <div className="border-t border-slate-800/80 pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-[10px] text-slate-550">
                 <div>Created: {new Date(trip.createdAt).toLocaleString()}</div>
@@ -354,6 +479,15 @@ const TripDetailsPage = () => {
         )}
 
       </main>
+
+      {/* Join Request Modal */}
+      <JoinRequestModal
+        isOpen={showJoinModal}
+        trip={trip}
+        onClose={() => setShowJoinModal(false)}
+        onSubmit={handleJoinSubmit}
+        submitting={submittingJoin}
+      />
 
       {/* Delete Confirmation Modal */}
       <ConfirmationModal 
