@@ -2,18 +2,18 @@
 
 <div align="center">
 
-### AI-Powered Travel Planning & Travel Buddy Matching Platform
+### AI-Powered Travel Planning & Travel Buddy Matchmaking Platform
 
-A full-stack MERN application that helps travelers **plan trips**, **discover compatible travel partners**, and **generate intelligent travel experiences** using AI.
+A full-stack MERN application that enables travelers to **plan trips**, **discover compatible travel partners**, **manage travel groups**, and **collaborate throughout their journey**.
 
-**Built with React, Node.js, Express, MongoDB, and AI-powered workflows.**
+Built using **React.js, Node.js, Express.js, MongoDB, Tailwind CSS, JWT Authentication**, and a modular REST API architecture.
 
 ---
 
 ![Project Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen)
-![Phase](https://img.shields.io/badge/Current%20Phase-3%20Complete-success)
-![License](https://img.shields.io/badge/License-MIT-orange)
+![Phase](https://img.shields.io/badge/Current%20Phase-4%20Complete-success)
 ![Stack](https://img.shields.io/badge/Stack-MERN-success)
+![License](https://img.shields.io/badge/License-MIT-orange)
 
 </div>
 
@@ -21,67 +21,89 @@ A full-stack MERN application that helps travelers **plan trips**, **discover co
 
 # 📖 Overview
 
-TravelBuddy AI is a modern travel platform designed to simplify travel planning while helping users find compatible travel companions based on their interests, travel style, budget, and preferences.
+TravelBuddy AI is a modern social travel platform that helps users create trips, discover compatible travel partners, manage join requests, collaborate with fellow travelers, and organize travel plans from a single application.
 
-The project follows a structured, feature-driven development approach where every module is designed, implemented, tested, and documented before moving to the next phase.
+The project follows a structured engineering approach where every phase is designed, implemented, tested, and documented before moving to the next milestone.
 
 ---
 
-# 🚀 Highlights
+# 🚀 Key Features
 
 - 🔐 Secure JWT Authentication
-- 👤 Complete User Profile System
-- 🧳 Full Trip Management System
-- 🌙 Modern Glassmorphism UI
-- 📱 Responsive Design
-- ⚡ React + Vite Frontend
-- 🍃 MongoDB Database
-- 🛡 Protected REST APIs
-- 🎯 Modular React Architecture
+- 👤 Complete User Profile Management
+- 🧳 Trip Management System
+- 🤝 Travel Buddy Matchmaking
+- 🔔 In-App Notification System
+- 🌍 Public Trip Discovery
+- 📱 Responsive Glassmorphism UI
+- 🛡 Role-Based Authorization
+- ⚡ REST API Architecture
 
 ---
 
 # ✨ Current Features
 
-## 🔐 Authentication System
+## 🔐 Authentication
 
 - User Registration
 - Secure Login
 - JWT Authentication
 - Protected Routes
-- Password Encryption using bcrypt
-- Persistent Login Sessions
+- Password Encryption (bcrypt)
+- Persistent Sessions
 
 ---
 
-## 👤 User Profile Management
+## 👤 User Profile
 
 - Create & Edit Profile
-- View Personal Profile
-- View Public Profiles
-- Travel Style Selection
-- Interests Management
+- Public User Profiles
+- Travel Preferences
 - Languages
-- Location
+- Interests
 - Bio
-- Profile Completion Progress
 - Dashboard Integration
+- Profile Completion Tracking
 
 ---
 
-## 🧳 Trip Management System
+## 🧳 Trip Management
 
-- Create Trip (5-Step Wizard)
-- View My Trips
-- View Trip Details
+- Multi-Step Trip Creation Wizard
+- Trip Details
 - Edit Trip
 - Delete Trip
-- Trip Preferences
-- Budget Planning
-- Travel Group Preferences
 - Public / Private Trips
-- Responsive Glassmorphism UI
+- Budget Planning
+- Travel Preferences
+- Trip Tags
+- Responsive Dashboard
 - Complete CRUD Operations
+
+---
+
+## 🤝 Travel Buddy Matchmaking
+
+- Browse Public Trips
+- Destination Search
+- Advanced Trip Filters
+- Send Join Requests
+- Accept / Reject Requests
+- Cancel Requests
+- Trip Members Management
+- Available Seat Management
+- Owner & Requester Dashboards
+
+---
+
+## 🔔 Notification System
+
+- In-App Notifications
+- Join Request Alerts
+- Request Accepted Notifications
+- Request Rejected Notifications
+- Notification Bell
+- Read / Unread Status
 
 ---
 
@@ -92,13 +114,27 @@ The project follows a structured, feature-driven development approach where ever
 | Phase 1 – Authentication | ✅ Complete |
 | Phase 2 – User Profile | ✅ Complete |
 | Phase 3 – Trip Management | ✅ Complete |
-| Phase 4 – Matchmaking | 🚧 In Progress |
-| Phase 5 – AI Features | ⏳ Planned |
-| Phase 6 – Deployment | ⏳ Planned |
+| Phase 4 – Travel Buddy Matchmaking | ✅ Complete |
+| Phase 5 – AI Trip Planning | 🚧 Planned |
+| Phase 6 – Booking & Travel Services | 🚧 Planned |
+| Phase 7 – Deployment | ⏳ Planned |
 
 ---
 
+# 🚀 Upcoming Features
 
+- 🧠 AI Trip Planner
+- 🏨 Hotel Recommendations
+- ✈️ Flight Search
+- 🚆 Train Booking
+- 🚖 Cab Booking
+- 🗺 Interactive Maps
+- 💬 Real-Time Chat
+- ⭐ Reviews & Ratings
+- 💰 Expense Sharing
+- 📍 Live Location Sharing
+
+---
 
 # 🛠 Tech Stack
 
@@ -142,6 +178,7 @@ TravelBuddy AI
 ├── src/
 │   ├── components/
 │   ├── context/
+│   ├── hooks/
 │   ├── pages/
 │   ├── routes/
 │   ├── services/
@@ -152,7 +189,8 @@ TravelBuddy AI
 │   ├── controllers/
 │   ├── middleware/
 │   ├── models/
-│   └── routes/
+│   ├── routes/
+│   └── utils/
 │
 └── README.md
 ```
@@ -161,7 +199,7 @@ TravelBuddy AI
 
 # 📸 Screenshots
 
-> Screenshots will be added after completion of the Matchmaking module.
+> Screenshots and demo GIFs will be added after deployment.
 
 ---
 
@@ -173,7 +211,7 @@ Clone the repository
 git clone https://github.com/adhyankumar0902/TRAVEL-BUDDY-AI.git
 ```
 
-Go to the project directory
+Navigate to the project
 
 ```bash
 cd TRAVEL-BUDDY-AI
@@ -192,13 +230,13 @@ cd server
 npm install
 ```
 
-Start the backend
+Start backend
 
 ```bash
 npm run dev
 ```
 
-Start the frontend
+Start frontend
 
 ```bash
 npm run dev
@@ -208,7 +246,7 @@ npm run dev
 
 # 🔐 Environment Variables
 
-Create a `.env` file inside the **server** folder.
+Create a `.env` file inside the **server** directory.
 
 ```env
 PORT=5000
@@ -220,19 +258,20 @@ JWT_SECRET=YOUR_SECRET_KEY
 
 ---
 
-# 🎯 Learning Objectives
+# 🎯 Learning Outcomes
 
-This project is being built to strengthen practical experience in:
+This project strengthened practical knowledge of:
 
 - Full Stack MERN Development
 - REST API Design
 - Authentication & Authorization
 - MongoDB Data Modeling
-- React Architecture
-- Context API
-- Clean Code Practices
+- React Component Architecture
+- State Management
+- Backend Validation
+- Responsive UI Design
 - Git & GitHub Workflow
-- AI-Assisted Software Development
+- Software Engineering Practices
 
 ---
 
@@ -240,18 +279,20 @@ This project is being built to strengthen practical experience in:
 
 - ✅ Authentication System
 - ✅ User Profile System
-- ✅ Trip Management System
-- 🚧 Travel Buddy Matchmaking
-- ⏳ AI Trip Planner
-- ⏳ Real-Time Chat
+- ✅ Trip Management
+- ✅ Travel Buddy Matchmaking
+- 🔔 Notification System
+- 🚧 AI Trip Planning
+- 🚧 Travel Booking Services
+- ⏳ Deployment
 
 ---
 
 # 🤝 Contributing
 
-Contributions, suggestions, and feedback are welcome.
+Contributions, ideas, and suggestions are welcome.
 
-Feel free to fork the repository and submit pull requests.
+Feel free to fork this repository and submit pull requests.
 
 ---
 
@@ -259,19 +300,40 @@ Feel free to fork the repository and submit pull requests.
 
 **Adhyan Kumar**
 
-B.Tech Computer Science & Engineering  
+B.Tech – Artificial Intelligence & Data Science
+
 Indian Institute of Technology Patna (IIT Patna)
 
 GitHub:
 
 https://github.com/adhyankumar0902
 
+LinkedIn:
+
+https://linkedin.com/in/adhyan-kumar-70904b346
+
 ---
 
 # ⭐ Project Status
 
-🚀 **TravelBuddy AI is currently under active development.**
+🚀 **TravelBuddy AI is under active development.**
 
-The project follows a structured milestone-based roadmap with each phase being fully implemented, tested, and documented before moving to the next stage.
+Current Release:
 
-If you like this project, consider giving it a ⭐ on GitHub!
+✅ Authentication
+
+✅ User Profiles
+
+✅ Trip Management
+
+✅ Travel Buddy Matchmaking
+
+Next Release:
+
+🧠 AI Trip Planning
+
+🏨 Travel Services Integration
+
+💬 Real-Time Communication
+
+⭐ If you found this project interesting, consider giving it a Star on GitHub!
