@@ -6,6 +6,10 @@ import SignupPage from '../pages/SignupPage';
 import DashboardPage from '../pages/DashboardPage';
 import ProfilePage from '../pages/ProfilePage';
 import EditProfilePage from '../pages/EditProfilePage';
+import CreateTripPage from '../pages/CreateTripPage';
+import MyTripsPage from '../pages/MyTripsPage';
+import TripDetailsPage from '../pages/TripDetailsPage';
+import EditTripPage from '../pages/EditTripPage';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -22,6 +26,12 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/edit" element={<EditProfilePage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
+        
+        {/* Trip Management Routes */}
+        <Route path="/trips/create" element={<CreateTripPage />} />
+        <Route path="/trips" element={<MyTripsPage />} />
+        <Route path="/trips/:id" element={<TripDetailsPage />} />
+        <Route path="/trips/edit/:id" element={<EditTripPage />} />
       </Route>
 
       {/* Catch-all Redirect */}

@@ -5,7 +5,8 @@ import profileService from '../services/profileService';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { 
   LogOut, User, Mail, Compass, MapPin, Calendar, 
-  Compass as CompassIcon, Award, ArrowRight, Edit, Sparkles, CheckCircle2 
+  Compass as CompassIcon, Award, ArrowRight, Edit, Sparkles, CheckCircle2,
+  PlusCircle, Map
 } from 'lucide-react';
 
 const DashboardPage = () => {
@@ -222,6 +223,28 @@ const DashboardPage = () => {
                   <span className="flex items-center gap-2">
                     <Edit className="h-4 w-4 text-brand-400" />
                     <span>Edit Profile</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-400 group-hover:translate-x-1 transition-all" />
+                </Link>
+
+                <Link
+                  to="/trips/create"
+                  className="flex items-center justify-between p-3.5 bg-navy-800/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                >
+                  <span className="flex items-center gap-2">
+                    <PlusCircle className="h-4 w-4 text-brand-400" />
+                    <span>Create Trip</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-400 group-hover:translate-x-1 transition-all" />
+                </Link>
+
+                <Link
+                  to="/trips"
+                  className="flex items-center justify-between p-3.5 bg-navy-800/40 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-200 font-semibold text-sm group"
+                >
+                  <span className="flex items-center gap-2">
+                    <Map className="h-4 w-4 text-brand-400" />
+                    <span>My Trips</span>
                   </span>
                   <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-400 group-hover:translate-x-1 transition-all" />
                 </Link>

@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const tripRoutes = require('./routes/tripRoutes');
 
 // Load environment variables from server/.env file
 dotenv.config();
@@ -25,6 +26,9 @@ app.use('/api/auth', authRoutes);
 
 // Main Profile Routes mount path
 app.use('/api/profile', profileRoutes);
+
+// Main Trip Routes mount path
+app.use('/api/trips', tripRoutes);
 
 // Simple health check endpoint
 app.get('/', (req, res) => {
